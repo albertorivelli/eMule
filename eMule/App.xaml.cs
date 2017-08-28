@@ -20,13 +20,18 @@ namespace eMule
     /// <summary>
     /// Provides application-specific behavior to supplement the default Application class.
     /// </summary>
-    sealed partial class App : Application
+    sealed partial class EmuleApp : Application
     {
+        //UploadBandwidthThrottler uploadBandwidthThrottler;
+        //ServerConnect serverconnect;
+        ListenSocket listensocket;
+        ClientUDPSocket clientudp;
+
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
         /// executed, and as such is the logical equivalent of main() or WinMain().
         /// </summary>
-        public App()
+        public EmuleApp()
         {
             this.InitializeComponent();
             this.Suspending += OnSuspending;
@@ -39,6 +44,9 @@ namespace eMule
         /// <param name="e">Details about the launch request and process.</param>
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
+            listensocket = new ListenSocket();
+            clientudp = new ClientUDPSocket();
+
 #if DEBUG
             if (System.Diagnostics.Debugger.IsAttached)
             {
@@ -102,5 +110,12 @@ namespace eMule
             //TODO: Save application state and stop any background activity
             deferral.Complete();
         }
+
+        public bool IsConnected(bool bIgnoreEd2k = false, bool bIgnoreKad = false)
+        {
+            return ((serverconnect.IsConnected() && !bIgnoreEd2k) || (Kademlia.Kademlia.IsConnected() && !bIgnoreKad));
+        }
+
+
     }
 }

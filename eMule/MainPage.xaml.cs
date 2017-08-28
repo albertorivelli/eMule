@@ -26,5 +26,10 @@ namespace eMule
         {
             this.InitializeComponent();
         }
+
+        void btnHamburger_Click(object sender, RoutedEventArgs e)
+        {
+            mainSplitView.IsPaneOpen = !mainSplitView.IsPaneOpen;
+        }
     }
 }
